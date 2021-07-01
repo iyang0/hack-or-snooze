@@ -1,0 +1,19 @@
+#models.js
+
+##story class
+-getHostName() method
+returns correct hostname
+
+##storyList class
+* pass in array of stories on call
+
+getStories() method
+* make new stories from the objects parsed from the JSON of array of stories
+* uses static so this method is called to make a new instance of storylist instead of calling new on storyList itself as the JSON object does not return instances of story objects but regular JS objects after it is parsed by axiom
+
+-addStory( user, newStory )
+Need to create this
+make a POST request to the API for creating a new story
+takes in user and story instance
+
+## user class
