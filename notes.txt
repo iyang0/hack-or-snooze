@@ -3,6 +3,7 @@
 ##story class
 -getHostName() method
 returns correct hostname
+^done
 
 ##storyList class
 * pass in array of stories on call
@@ -15,5 +16,25 @@ getStories() method
 Need to create this
 make a POST request to the API for creating a new story
 takes in user and story instance
+^done
 
 ## user class
+
+________
+Building the UI for new story form/adding a new story
+
+-Add a form in the HTML for the story. This should initially be hidden.^
+-Add a link in the navbar with the text of “submit”.^
+-Write a function in nav.js that is called when users click that navbar link. Look at the other function names in that file that do similar things and pick something descriptive and similar.^
+-Write a function in stories.js that is called when users submit the form. Pick a good name for it. This function should get the data from the form, call the .addStory method you wrote, and then put that new story on the page.
+
+#nav.js
+make new function for adding the story
+
+#stories.js
+
+##story class
+makes new function that
+	grabs values in the text boxes
+	makes new story object from passed in values
+	call the .addstory method on the list of stories (storyList)

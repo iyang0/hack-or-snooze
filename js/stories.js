@@ -50,3 +50,26 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** takes in a user as input and creates and returns a new story
+* based on what is in the submission form fields for author, title, and URL
+*/
+async function submitNewStory(evt){
+  console.debug("submit Story", evt);
+  // let userToken = currentUser.loginToken;
+  let author = $("#create-author").val();
+  let title = $("#create-title").val();
+  let url = $("#create-url").val();
+  
+  $("#submit-form").hide();
+  //call the addStory method
+  let newStory= await storyList.addStory(currentUser, {title, author, url})
+  
+  //update the story list and put it onto the page
+  storyList.stories.unshift(newStory);
+  const $story = generateStoryMarkup(newStory);
+  $allStoriesList.prepend($story);
+  
+}
+
+$("#submit-form").on("submit", submitNewStory);

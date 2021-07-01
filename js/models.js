@@ -81,7 +81,7 @@ class StoryList {
     let storyAuthor = newStory.author;
     let storyURL = newStory.url;
     // let username = user.username;
-
+    
     let response =  await axios( 
       {
       url: `${BASE_URL}/stories`,
@@ -90,10 +90,10 @@ class StoryList {
       data: { token: userToken, 
         story:{ author: storyAuthor, 
                 title: storyTitle,  
-                url:storyURL }}} )
+                url:storyURL }}} );
 
-    return new Story(response)         
-}
+    return new Story(response.data.story)         
+  }
 }
 
 /******************************************************************************
