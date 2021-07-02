@@ -229,6 +229,7 @@ class User {
     //currentUser = new User(response.data.user);
     //console.log(response)
     this.favorites = response.data.user.favorites;
+    
     //currentUser.loginToken = loginToken;
     //storyList.stories
     // for(let story in storyList.stories){

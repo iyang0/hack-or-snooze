@@ -70,4 +70,5 @@ ________
 
 favorites view
 
-loop through the user's favorites and build it to the dom
+loop through the user's favorites and build it to the dom 
+

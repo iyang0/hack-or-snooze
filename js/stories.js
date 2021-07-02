@@ -22,7 +22,8 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
-  const hostName = story.getHostName();
+  //const hostName = story.getHostName();
+  const hostName = story.url;
   return $(`
       <li id="${story.storyId}">
         <a href="${story.url}" target="a_blank" class="story-link">
@@ -51,6 +52,20 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
+/**updates the dom  list of favorited stories */
+function putFavoritesOnPage(){
+
+    $("#favorited-stories").empty();
+    $("#submit-form").hide();
+
+    for(let story of currentUser.favorites){
+      const $story  = generateStoryMarkup(story);
+      $story.prepend($(`<span class = "star" > <i class="fas fa-star"> </i></span>`));
+      $("#favorited-stories").append($story);
+    }
+
+}
+
 /** takes in a user as input and creates and returns a new story
 * based on what is in the submission form fields for author, title, and URL
 */
@@ -74,46 +89,60 @@ async function submitNewStory(evt){
 
 $("#submit-form").on("submit", submitNewStory);
 
+
+/** add star to the story's DOM element */
+
 function addStarToStories(){
-  let favoriteStories = currentUser.favorites;
+  let favoriteStories = currentUser.favorites.map( story => story.storyId);
   let $stories =  $allStoriesList.children();
-  // revisit this , learn how to properly loop through $stories
+
   for( let story of $stories ){
-    console.log(story)
-    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`);
+    let starColor = (favoriteStories.includes($(story).attr("id"))) ? "fas fa-star" : "far fa-star";
+
+    let starSymbol = $(`<span class = "star" > <i class="${starColor}"> </i></span>`);
     $(story).prepend(starSymbol);
+
   }
+
 }
 
+/** when a star is click it gets the story from the ID
+ * then it would call favorites or unfavorites depending  
+ * if it was in the user's favorite list
+*/
 async function starClickHandler(evt){
     
-    // console.log($(evt.target).parent().attr("class")==="star");
-    // console.log($(evt.target).parents("li").attr("id"));
+
     
     let storyId = $(evt.target).parents("li").attr("id");
-    
+
     const response = await axios({
       url: `${BASE_URL}/stories/${storyId}`,
       method: "GET",
     });
-    // console.log(response.data.story);
     
     let clickedStory = response.data.story;
     
     let isInFavorite = currentUser.favorites.some(x =>compareStoryId(clickedStory, x));
     
     if(isInFavorite){
-      currentUser.unFavorite(clickedStory)
-    }else(
+      currentUser.unFavorite(clickedStory);
+      $(evt.target).toggleClass("fas");
+      $(evt.target).toggleClass("far");
+
+    }else{
       currentUser.addFavorite(clickedStory)
-    )
-    // console.log(isInFavorite);
-    
-    return response;
+      $(evt.target).toggleClass("fas")
+      $(evt.target).toggleClass("far")
+    }
+
 }
+
+//** return true if both id are the same */
 
 function compareStoryId(story1, story2) {
     return story1.storyId === story2.storyId;
 }
 
-$allStoriesList.on("click", "i", starClickHandler)
+
+$(".stories-container").on("click", "i", starClickHandler)
