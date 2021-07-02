@@ -215,17 +215,19 @@ class User {
 
     // let storyDataID = evt.target.parent().attr('id')
 
-    debugger;
-    let loginToken = this.loginToken
+
+    //let loginToken = this.loginToken
+
     const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${evt}`,
       method: "POST",
       params: { token: this.loginToken },
     });
 
-    console.log(response.data.user)
-    currentUser = new User(response.data.user);
-    currentUser.loginToken = loginToken;
+    // currentUser = new User(response.data.user);
+    console.log(response)
+    this.favorites = response.data.user.favorites
+    //currentUser.loginToken = loginToken;
     //storyList.stories
     // for(let story in storyList.stories){
     //   if(story.storyId === storyDataID){
