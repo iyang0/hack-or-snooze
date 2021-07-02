@@ -12,13 +12,14 @@ class Story {
    *   - {title, author, url, username, storyId, createdAt}
    */
 
-  constructor({ storyId, title, author, url, username, createdAt }) {
+  constructor({ storyId, title, author, url, username, createdAt, favorites =false}) {
     this.storyId = storyId;
     this.title = title;
     this.author = author;
     this.url = url;
     this.username = username;
     this.createdAt = createdAt;
+    this.favorites = favorites;
   }
 
   /** Parses hostname out of URL and returns it. */
@@ -208,4 +209,36 @@ class User {
       return null;
     }
   }
+
+
+  async addFavorite(evt){
+
+    // let storyDataID = evt.target.parent().attr('id')
+
+    debugger;
+    let loginToken = this.loginToken
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${evt}`,
+      method: "POST",
+      params: { token: this.loginToken },
+    });
+
+    console.log(response.data.user)
+    currentUser = new User(response.data.user);
+    currentUser.loginToken = loginToken;
+    //storyList.stories
+    // for(let story in storyList.stories){
+    //   if(story.storyId === storyDataID){
+    //     this.favorites.push(story)
+    //   }
+    return null;
+    
+  } 
+
+  unFavorite(){
+
+  }
+
+
+
 }

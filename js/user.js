@@ -107,10 +107,22 @@ function saveUserCredentialsInLocalStorage() {
  * - generate the user profile part of the page
  */
 
+
+//
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
+  
+  let $stories =  $allStoriesList.children()
+  // revisit this , learn how to properly loop through $stories
+  for( let story in $stories ){
+    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`)
+    // story.prepend(starSymbol)
+  }
+
   $allStoriesList.show();
+
+
 
   updateNavOnLogin();
 }
