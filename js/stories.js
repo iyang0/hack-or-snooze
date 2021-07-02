@@ -75,11 +75,13 @@ async function submitNewStory(evt){
 $("#submit-form").on("submit", submitNewStory);
 
 function addStarToStories(){
-  let $stories =  $allStoriesList.children()
+  let favoriteStories = currentUser.favorites;
+  let $stories =  $allStoriesList.children();
   // revisit this , learn how to properly loop through $stories
   for( let story of $stories ){
-    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`)
-    $(story).prepend(starSymbol)
+    console.log(story)
+    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`);
+    $(story).prepend(starSymbol);
   }
 }
 
