@@ -59,3 +59,10 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
+/**create my stories page */
+function toggleMyStories(){
+
+}
+
+
+

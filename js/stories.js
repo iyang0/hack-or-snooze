@@ -22,6 +22,7 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
   let starSymbol ="";
+  
   if(currentUser !== undefined){
     let favoriteStories = new Set(currentUser.favorites.map( story => story.storyId));
     let isInFavorites = favoriteStories.has(story.storyId);
@@ -73,8 +74,21 @@ function putFavoritesOnPage(){
     // $story.prepend($(`<span class = "star" > <i class="fas fa-star"> </i></span>`));
     $("#favorited-stories").append($story);
   }
+}
+
+/** put my submissions on page*/
+function putSubmissionsOnPage(){
+  console.debug("putSubmissionsOnPage")
+  $("#my-stories").empty()
+  
+  for(let story of currentUser.ownStories){
+    const $story  = generateStoryMarkup(story);
+    // $story.prepend($(`<span class = "star" > <i class="fas fa-star"> </i></span>`));
+    $("#my-stories").append($story);
+  }
 
 }
+
 
 /** takes in a user as input and creates and returns a new story
 * based on what is in the submission form fields for author, title, and URL
@@ -98,6 +112,19 @@ async function submitNewStory(evt){
 }
 
 $("#submit-form").on("submit", submitNewStory);
+
+async function deleteStory(evt){
+
+  let removedResponse = await axios({
+    url: `${BASE_URL}/stories/${evt.storyId}`,
+    method: "DELETE",
+    params: { token: currentUser.loginToken }
+  }
+  )
+
+  return removedResponse.data.story
+
+}
 
 
 /** add star to the story's DOM element */
