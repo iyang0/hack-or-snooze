@@ -12,7 +12,7 @@ class Story {
    *   - {title, author, url, username, storyId, createdAt}
    */
 
-  constructor({ storyId, title, author, url, username, createdAt, favorites =false}) {
+  constructor({ storyId, title, author, url, username, createdAt}, favorites =false) {
     this.storyId = storyId;
     this.title = title;
     this.author = author;
@@ -120,7 +120,7 @@ class User {
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
-    this.favorites = favorites.map(s => new Story(s));
+    this.favorites = favorites.map(s => new Story(s, true));
     this.ownStories = ownStories.map(s => new Story(s));
 
     // store the login token on the user so it's easy to find for API calls.
@@ -211,34 +211,42 @@ class User {
   }
 
 
-  async addFavorite(evt){
-
+/* addFavorite and unFavorite takes in a story
+* and favorites or unfavorites it in for the user instance 
+* as well as changing the parameter in the story instance
+*/
+  async addFavorite(story){
     // let storyDataID = evt.target.parent().attr('id')
-
 
     //let loginToken = this.loginToken
 
     const response = await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${evt}`,
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: "POST",
       params: { token: this.loginToken },
     });
-
+    // story.favorites = true;
     //currentUser = new User(response.data.user);
     //console.log(response)
-    this.favorites = response.data.user.favorites
+    this.favorites = response.data.user.favorites;
     //currentUser.loginToken = loginToken;
     //storyList.stories
     // for(let story in storyList.stories){
     //   if(story.storyId === storyDataID){
     //     this.favorites.push(story)
     //   }
-    return null;
+    // return null;
     
   } 
 
-  unFavorite(){
-
+  async unFavorite(story){
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: "DELETE",
+      params: { token: this.loginToken },
+    });
+    // story.favorites = false;
+    this.favorites = response.data.user.favorites;
   }
 
 

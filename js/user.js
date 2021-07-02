@@ -112,14 +112,7 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
-  
-  let $stories =  $allStoriesList.children()
-  // revisit this , learn how to properly loop through $stories
-  for( let story of $stories ){
-    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`)
-    $(story).prepend(starSymbol)
-  }
-
+  addStarToStories();
   $allStoriesList.show();
 
 

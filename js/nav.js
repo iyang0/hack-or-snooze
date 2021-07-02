@@ -30,6 +30,7 @@ $navLogin.on("click", navLoginClick);
 function navToggleStoryForm(evt) {
   console.debug("navToggleStoryForm", evt);
   navAllStories(evt);
+  addStarToStories();
   $("#submit-form").slideToggle();
 }
 

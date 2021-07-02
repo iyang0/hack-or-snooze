@@ -38,3 +38,36 @@ makes new function that
 	grabs values in the text boxes
 	makes new story object from passed in values
 	call the .addstory method on the list of stories (storyList)
+	
+
+_________
+Favoriting and unfavoriting 
+
+#model.js
+
+##user class
+
+### addFavorite() method
+* currently takes in a storyID and returns nothing, but updates the current user in memory's favorites along with the user stored in their API
+- possibly want it to take in a story instead of a story ID
+
+#stories.js
+
+- add click handler function when clicking on a star, click handler is on the all-stories-list
+it gets the ID from parent element of the story, calls the API with get story
+(https://hack-or-snooze-v3.herokuapp.com/stories/<storyId>) and check if story is favorited or not,
+then either call user.addFavorite() or user.unFavorite()
+
+#model.js 
+
+* user.addfavorite()/user.unfavorite takes in a story and favorites or unfavorites it in memory and in API.
+
+#story.js
+
+- we will need a function to put put favorite list on page.
+
+________
+
+favorites view
+
+loop through the user's favorites and build it to the dom

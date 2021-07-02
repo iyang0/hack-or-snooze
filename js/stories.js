@@ -63,7 +63,7 @@ async function submitNewStory(evt){
   
   $("#submit-form").hide();
   //call the addStory method
-  let newStory= await storyList.addStory(currentUser, {title, author, url})
+  let newStory = await storyList.addStory(currentUser, {title, author, url})
   
   //update the story list and put it onto the page
   storyList.stories.unshift(newStory);
@@ -73,3 +73,45 @@ async function submitNewStory(evt){
 }
 
 $("#submit-form").on("submit", submitNewStory);
+
+function addStarToStories(){
+  let $stories =  $allStoriesList.children()
+  // revisit this , learn how to properly loop through $stories
+  for( let story of $stories ){
+    let starSymbol = $(`<span class = "star" > <i class="far fa-star"> </i></span>`)
+    $(story).prepend(starSymbol)
+  }
+}
+
+async function starClickHandler(evt){
+    
+    // console.log($(evt.target).parent().attr("class")==="star");
+    // console.log($(evt.target).parents("li").attr("id"));
+    
+    let storyId = $(evt.target).parents("li").attr("id");
+    
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "GET",
+    });
+    // console.log(response.data.story);
+    
+    let clickedStory = response.data.story;
+    
+    let isInFavorite = currentUser.favorites.some(x =>compareStoryId(clickedStory, x));
+    
+    if(isInFavorite){
+      currentUser.unFavorite(clickedStory)
+    }else(
+      currentUser.addFavorite(clickedStory)
+    )
+    // console.log(isInFavorite);
+    
+    return response;
+}
+
+function compareStoryId(story1, story2) {
+    return story1.storyId === story2.storyId;
+}
+
+$allStoriesList.on("click", "i", starClickHandler)
