@@ -224,8 +224,8 @@ class User {
       params: { token: this.loginToken },
     });
 
-    // currentUser = new User(response.data.user);
-    console.log(response)
+    //currentUser = new User(response.data.user);
+    //console.log(response)
     this.favorites = response.data.user.favorites
     //currentUser.loginToken = loginToken;
     //storyList.stories
