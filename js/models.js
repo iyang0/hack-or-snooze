@@ -25,7 +25,6 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
     return this.url;
   }
 }
@@ -75,13 +74,12 @@ class StoryList {
    */
 
   async addStory( user, newStory ) {
-    //token fromt he user
 
+    //token from the user
     let userToken = user.loginToken;
     let storyTitle = newStory.title;
     let storyAuthor = newStory.author;
     let storyURL = newStory.url;
-    // let username = user.username;
     
     let response =  await axios( 
       {
@@ -93,7 +91,7 @@ class StoryList {
                 title: storyTitle,  
                 url:storyURL }}} );
 
-    return new Story(response.data.story)         
+    return new Story(response.data.story);
   }
 }
 
@@ -249,7 +247,5 @@ class User {
     // story.favorites = false;
     this.favorites = response.data.user.favorites;
   }
-
-
 
 }

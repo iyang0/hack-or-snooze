@@ -21,11 +21,22 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
+  let starSymbol ="";
+  if(currentUser !== undefined){
+    let favoriteStories = new Set(currentUser.favorites.map( story => story.storyId));
+    let isInFavorites = favoriteStories.has(story.storyId);
+    let starColor = (isInFavorites) ? "fas" : "far";
+    starSymbol =`
+          <span class = "star" > 
+            <i class="fa-star ${starColor}"></i>
+          </span>`;
+  }
 
   //const hostName = story.getHostName();
   const hostName = story.url;
   return $(`
       <li id="${story.storyId}">
+      ${starSymbol}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -37,7 +48,6 @@ function generateStoryMarkup(story) {
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
-
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
@@ -54,15 +64,15 @@ function putStoriesOnPage() {
 
 /**updates the dom  list of favorited stories */
 function putFavoritesOnPage(){
+  console.debug("putFavoritesOnPage");
+  $("#favorited-stories").empty();
+  $("#submit-form").hide();
 
-    $("#favorited-stories").empty();
-    $("#submit-form").hide();
-
-    for(let story of currentUser.favorites){
-      const $story  = generateStoryMarkup(story);
-      $story.prepend($(`<span class = "star" > <i class="fas fa-star"> </i></span>`));
-      $("#favorited-stories").append($story);
-    }
+  for(let story of currentUser.favorites){
+    const $story  = generateStoryMarkup(story);
+    // $story.prepend($(`<span class = "star" > <i class="fas fa-star"> </i></span>`));
+    $("#favorited-stories").append($story);
+  }
 
 }
 
@@ -70,13 +80,13 @@ function putFavoritesOnPage(){
 * based on what is in the submission form fields for author, title, and URL
 */
 async function submitNewStory(evt){
-  console.debug("submit Story", evt);
-  // let userToken = currentUser.loginToken;
+  console.debug("submit Story");
   let author = $("#create-author").val();
   let title = $("#create-title").val();
   let url = $("#create-url").val();
   
   $("#submit-form").hide();
+  
   //call the addStory method
   let newStory = await storyList.addStory(currentUser, {title, author, url})
   
@@ -91,28 +101,29 @@ $("#submit-form").on("submit", submitNewStory);
 
 
 /** add star to the story's DOM element */
-
-function addStarToStories(){
-  let favoriteStories = currentUser.favorites.map( story => story.storyId);
+/* function addStarToStories(){
+  // let favoriteStories = currentUser.favorites.map( story => story.storyId);
+  let favoriteStories = new Set(currentUser.favorites.map( story => story.storyId));
   let $stories =  $allStoriesList.children();
 
+  // for each story, check if it is in user's favorite
+  // then prepend a blank or filled star depending on if it is
   for( let story of $stories ){
-    let starColor = (favoriteStories.includes($(story).attr("id"))) ? "fas fa-star" : "far fa-star";
+    
+    let isInFavorites = favoriteStories.has($(story).attr("id"));
+    let starColor = (isInFavorites) ? "fas" : "far";
 
-    let starSymbol = $(`<span class = "star" > <i class="${starColor}"> </i></span>`);
+    let starSymbol = $(`<span class = "star" > <i class="fa-star ${starColor}"> </i></span>`);
     $(story).prepend(starSymbol);
-
   }
 
-}
+} */
 
 /** when a star is click it gets the story from the ID
  * then it would call favorites or unfavorites depending  
  * if it was in the user's favorite list
 */
 async function starClickHandler(evt){
-    
-
     
     let storyId = $(evt.target).parents("li").attr("id");
 
@@ -123,26 +134,17 @@ async function starClickHandler(evt){
     
     let clickedStory = response.data.story;
     
-    let isInFavorite = currentUser.favorites.some(x =>compareStoryId(clickedStory, x));
+    let isInFavorite = currentUser.favorites.some( story =>{ 
+      return clickedStory.storyId === story.storyId
+    });
     
     if(isInFavorite){
       currentUser.unFavorite(clickedStory);
-      $(evt.target).toggleClass("fas");
-      $(evt.target).toggleClass("far");
-
     }else{
       currentUser.addFavorite(clickedStory)
-      $(evt.target).toggleClass("fas")
-      $(evt.target).toggleClass("far")
     }
-
-}
-
-//** return true if both id are the same */
-
-function compareStoryId(story1, story2) {
-    return story1.storyId === story2.storyId;
+    $(evt.target).toggleClass("fas far");
 }
 
 
-$(".stories-container").on("click", "i", starClickHandler)
+$(".stories-container").on("click", "i", starClickHandler);

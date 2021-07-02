@@ -7,11 +7,10 @@
 /** Show main list of all stories when click site name */
 
 function navAllStories(evt) {
-  console.debug("navAllStories", evt);
+  console.debug("navAllStories");
   hidePageComponents();
   putStoriesOnPage();
-  addStarToStories();
-
+  // addStarToStories();
 }
 
 $body.on("click", "#nav-all", navAllStories);
@@ -32,7 +31,6 @@ $navLogin.on("click", navLoginClick);
 function navToggleStoryForm(evt) {
   console.debug("navToggleStoryForm");
   navAllStories(evt);
-  addStarToStories();
   $("#submit-form").slideToggle();
 }
 
@@ -47,7 +45,6 @@ function toggleFavoritesList(evt){
   $("#favorited-stories").show();
 
 }
-
 
 $("#nav-favorites").on("click", toggleFavoritesList);
 
