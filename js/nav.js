@@ -40,13 +40,27 @@ $("#nav-submit-story").on("click", navToggleStoryForm);
 /** show favorites list on click of "favorites" **/
 function toggleFavoritesList(evt){
   console.debug("toggleFavoritesList");
+  $("#submit-form").hide();
   $allStoriesList.hide();
+  $("#my-stories").hide();
   putFavoritesOnPage();
   $("#favorited-stories").show();
 
 }
 
 $("#nav-favorites").on("click", toggleFavoritesList);
+
+function toggleMyStories(evt) {
+  $allStoriesList.hide();
+  $("#favorited-stories").hide();
+
+  $("#submit-form").hide();
+  putSubmissionsOnPage();
+  $("#my-stories").show();
+
+}
+
+$("#nav-my-stories").on("click", toggleMyStories);
 
 
 /** When a user first logins in, update the navbar to reflect that. */
@@ -59,10 +73,6 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
-/**create my stories page */
-function toggleMyStories(){
-
-}
 
 
 

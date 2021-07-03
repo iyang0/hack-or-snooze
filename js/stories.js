@@ -22,7 +22,7 @@ async function getAndShowStoriesOnStart() {
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
   let starSymbol ="";
-  
+
   if(currentUser !== undefined){
     let favoriteStories = new Set(currentUser.favorites.map( story => story.storyId));
     let isInFavorites = favoriteStories.has(story.storyId);
